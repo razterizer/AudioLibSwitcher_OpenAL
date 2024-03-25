@@ -1,0 +1,3 @@
+[submodule "AudioLibSwitcher"]
+	path = AudioLibSwitcher
+	url = https://github.com/razterizer/AudioLibSwitcher
