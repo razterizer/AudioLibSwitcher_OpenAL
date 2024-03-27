@@ -109,12 +109,12 @@ namespace audio
       alSourcef(src_id, AL_GAIN, volume);
     }
     
-    virtual void set_source_pitch(int src_id float pitch) override
+    virtual void set_source_pitch(int src_id, float pitch) override
     {
       alSourcef(src_id, AL_PITCH, pitch);
     }
     
-    virtual void set_source_looping(int src_id bool loop) override
+    virtual void set_source_looping(int src_id, bool loop) override
     {
       alSourcei(src_id, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
     }
