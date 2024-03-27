@@ -106,7 +106,7 @@ namespace audio
     
     virtual void set_source_volume(int src_id, float vol) override
     {
-      alSourcef(src_id, AL_GAIN, volume);
+      alSourcef(src_id, AL_GAIN, vol);
     }
     
     virtual void set_source_pitch(int src_id, float pitch) override
