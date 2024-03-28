@@ -56,76 +56,76 @@ namespace audio
       alcCloseDevice(m_device);
     }
     
-    virtual int create_source() override
+    virtual unsigned int create_source() override
     {
-      int source_id = 0;
+      unsigned int source_id = 0;
       // Generate OpenAL source
       alGenSources(1, &source_id);
       return source_id;
     }
     
-    virtual void destroy_source(int src_id) override
+    virtual void destroy_source(unsigned int src_id) override
     {
       alDeleteSources(1, &src_id);
     }
     
-    virtual int create_buffer() override
+    virtual unsigned int create_buffer() override
     {
       // Generate OpenAL buffer
-      int buffer_id = 0;
+      unsigned int buffer_id = 0;
       alGenBuffers(1, &buffer_id);
       return buffer_id;
     }
     
-    virtual void destroy_buffer(int buf_id) override
+    virtual void destroy_buffer(unsigned int buf_id) override
     {
       alDeleteBuffers(1, &buf_id);
     }
     
-    virtual void play_source(int src_id) override
+    virtual void play_source(unsigned int src_id) override
     {
       alSourcePlay(src_id);
     }
     
-    virtual bool is_source_playing(int src_id) override
+    virtual bool is_source_playing(unsigned int src_id) override
     {
       ALint source_state = 0;
       alGetSourcei(src_id, AL_SOURCE_STATE, &source_state);
       return source_state == AL_PLAYING;
     }
     
-    virtual void pause_source(int src_id) override
+    virtual void pause_source(unsigned int src_id) override
     {
       alSourcePause(src_id);
     }
     
-    virtual void stop_source(int src_id) override
+    virtual void stop_source(unsigned int src_id) override
     {
       alSourceStop(src_id);
     }
     
-    virtual void set_source_volume(int src_id, float vol) override
+    virtual void set_source_volume(unsigned int src_id, float vol) override
     {
       alSourcef(src_id, AL_GAIN, vol);
     }
     
-    virtual void set_source_pitch(int src_id, float pitch) override
+    virtual void set_source_pitch(unsigned int src_id, float pitch) override
     {
       alSourcef(src_id, AL_PITCH, pitch);
     }
     
-    virtual void set_source_looping(int src_id, bool loop) override
+    virtual void set_source_looping(unsigned int src_id, bool loop) override
     {
       alSourcei(src_id, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
     }
     
     // #NOTE: Might be deprecated.
-    virtual void detach_source(int src_id) override
+    virtual void detach_source(unsigned int src_id) override
     {
       alSourcei(src_id, AL_BUFFER, 0);
     }
     
-    virtual void set_source_standard_params(int src_id) override
+    virtual void set_source_standard_params(unsigned int src_id) override
     {
       // Set source parameters (adjust as needed)
       alSourcef(src_id, AL_PITCH, 1.0f);
@@ -135,12 +135,12 @@ namespace audio
       alSourcei(src_id, AL_LOOPING, AL_FALSE); // Adjust as needed
     }
     
-    virtual void set_buffer_data_mono_16(int buf_id, const std::vector<short>& buffer, int sample_rate) override
+    virtual void set_buffer_data_mono_16(unsigned int buf_id, const std::vector<short>& buffer, int sample_rate) override
     {
       alBufferData(buf_id, AL_FORMAT_MONO16, buffer.data(), static_cast<ALsizei>(buffer.size() * sizeof(short)), static_cast<ALsizei>(sample_rate));
     }
     
-    virtual void attach_buffer_to_source(int src_id, int buf_id) override
+    virtual void attach_buffer_to_source(unsigned int src_id, unsigned int buf_id) override
     {
       // Attach buffer to source
       alSourcei(src_id, AL_BUFFER, buf_id);
