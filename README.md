@@ -1,6 +1,8 @@
 # AudioLibSwitcher_OpenAL
 
 ![GitHub License](https://img.shields.io/github/license/razterizer/AudioLibSwitcher_OpenAL?color=blue)
+![Static Badge](https://img.shields.io/badge/linkage-header_only-yellow)
+![Static Badge](https://img.shields.io/badge/C%2B%2B-20-yellow)
 
 An adapter / interface implementation of the `IAudioLibSwitcher` interface (see [AudioLibSwitcher](https://github.com/razterizer/AudioLibSwitcher) for [OpenAL-Soft](https://github.com/kcat/openal-soft).
 
