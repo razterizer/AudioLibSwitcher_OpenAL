@@ -8,14 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0739DA0D2BB0FFAE00964E96 /* IAudioLibSwitcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 0739DA0C2BB0FFAE00964E96 /* IAudioLibSwitcher.h */; };
+		07BDBB8B2E75B592002ACC96 /* AudioLibSwitcher_OpenAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 07BDBB8A2E75B592002ACC96 /* AudioLibSwitcher_OpenAL.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0739DA042BB0FBAC00964E96 /* libAudioLibSwitcher_OpenAL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAudioLibSwitcher_OpenAL.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0739DA0C2BB0FFAE00964E96 /* IAudioLibSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IAudioLibSwitcher.h; path = AudioLibSwitcher/IAudioLibSwitcher.h; sourceTree = "<group>"; };
-		0739DA0E2BB0FFCF00964E96 /* AudioLibSwitcher_OpenAL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioLibSwitcher_OpenAL.h; sourceTree = "<group>"; };
 		0739DB412BB9810200964E96 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0739DB422BB9810700964E96 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		07BDBB8A2E75B592002ACC96 /* AudioLibSwitcher_OpenAL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioLibSwitcher_OpenAL.h; path = include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,8 +35,8 @@
 			children = (
 				0739DB422BB9810700964E96 /* LICENSE */,
 				0739DB412BB9810200964E96 /* README.md */,
+				07BDBB8A2E75B592002ACC96 /* AudioLibSwitcher_OpenAL.h */,
 				0739DA0B2BB0FFA000964E96 /* AudioLibSwitcher */,
-				0739DA0E2BB0FFCF00964E96 /* AudioLibSwitcher_OpenAL.h */,
 				0739DA052BB0FBAC00964E96 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0739DA0D2BB0FFAE00964E96 /* IAudioLibSwitcher.h in Headers */,
+				07BDBB8B2E75B592002ACC96 /* AudioLibSwitcher_OpenAL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
