@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "AudioLibSwitcher/IAudioLibSwitcher.h"
+#include "../../AudioLibSwitcher/include/AudioLibSwitcher/IAudioLibSwitcher.h"
 
 #ifdef _MSC_VER
   #include <OpenAL_Soft/al.h>
