@@ -8,3 +8,12 @@
 An adapter / interface implementation of the `IAudioLibSwitcher` interface (see [AudioLibSwitcher](https://github.com/razterizer/AudioLibSwitcher) for [OpenAL-Soft](https://github.com/kcat/openal-soft).
 
 When cloning, don't forget to use the flag `--recurse-submodules`. For example: `git clone AudioLibSwitcher_OpenAL --recurse-submodules`
+
+When updating the submodule hash to the latest hash:
+```bash
+# First cd to repo root.
+git submodule update --remote AudioLibSwitcher
+git add AudioLibSwitcher
+git commit -m "Updated the submodule to the latest changeset."
+git push
+```
