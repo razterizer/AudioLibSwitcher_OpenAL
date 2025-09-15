@@ -119,12 +119,6 @@ namespace audio
       alSourcei(src_id, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
     }
     
-    // #NOTE: Might be deprecated.
-    virtual void detach_source(unsigned int src_id) override
-    {
-      alSourcei(src_id, AL_BUFFER, 0);
-    }
-    
     virtual void set_source_standard_params(unsigned int src_id) override
     {
       // Set source parameters (adjust as needed)
@@ -144,6 +138,11 @@ namespace audio
     {
       // Attach buffer to source
       alSourcei(src_id, AL_BUFFER, buf_id);
+    }
+    
+    virtual void detach_buffer_from_source(unsigned int src_id) override
+    {
+      alSourcei(src_id, AL_BUFFER, 0);
     }
     
     virtual std::string check_error() override
