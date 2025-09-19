@@ -129,9 +129,62 @@ namespace audio
       alSourcei(src_id, AL_LOOPING, AL_FALSE); // Adjust as needed
     }
     
-    virtual void set_buffer_data_mono_16(unsigned int buf_id, const std::vector<short>& buffer, int sample_rate) override
+    virtual bool set_buffer_data_8u(unsigned int buf_id, const std::vector<unsigned char>& buffer, int num_channels, int sample_rate)
     {
-      alBufferData(buf_id, AL_FORMAT_MONO16, buffer.data(), static_cast<ALsizei>(buffer.size() * sizeof(short)), static_cast<ALsizei>(sample_rate));
+      ALenum format;
+      if (num_channels == 1)
+        format = AL_FORMAT_MONO8;
+      else if (num_channels == 2)
+        format = AL_FORMAT_STEREO8;
+      else
+      {
+        std::cerr << "ERROR: Unsupported number of channels for 8u format!" << std::endl;
+        return false;
+      }
+      alBufferData(buf_id, format, buffer.data(), static_cast<ALsizei>(buffer.size() * sizeof(unsigned char)), sample_rate);
+      return true;
+    }
+    
+    virtual bool set_buffer_data_16s(unsigned int buf_id, const std::vector<signed short>& buffer, int num_channels, int sample_rate)
+    {
+      ALenum format;
+      if (num_channels == 1)
+        format = AL_FORMAT_MONO16;
+      else if (num_channels == 2)
+        format = AL_FORMAT_STEREO16;
+      else
+      {
+        std::cerr << "ERROR: Unsupported number of channels for 16s format!" << std::endl;
+        return false;
+      }
+      alBufferData(buf_id, format, buffer.data(), static_cast<ALsizei>(buffer.size() * sizeof(signed short)), sample_rate);
+      return true;
+    }
+    
+    virtual bool set_buffer_data_32f(unsigned int buf_id, const std::vector<float>& buffer, int num_channels, int sample_rate)
+    {
+      // 32-bit float is not part of the original OpenAL 1.1 core spec.
+      // It is available through the common AL_EXT_FLOAT32 extension.
+      // You MUST check for support first.
+      
+      if (!alIsExtensionPresent("AL_EXT_float32"))
+      {
+        std::cout << "ERROR: 32-bit float format not supported by this OpenAL implementation!" << std::endl;
+        return false;
+      }
+      
+      ALenum format;
+      if (num_channels == 1)
+        format = AL_FORMAT_MONO_FLOAT32;
+      else if (num_channels == 2)
+        format = AL_FORMAT_STEREO_FLOAT32;
+      else
+      {
+        std::cerr << "ERROR: Unsupported number of channels for 32f format!" << std::endl;
+        return false;
+      }
+      alBufferData(buf_id, format, buffer.data(), static_cast<ALsizei>(buffer.size() * sizeof(float)), sample_rate);
+      return true;
     }
     
     virtual void attach_buffer_to_source(unsigned int src_id, unsigned int buf_id) override
