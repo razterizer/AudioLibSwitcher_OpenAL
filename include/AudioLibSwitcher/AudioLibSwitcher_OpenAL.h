@@ -129,7 +129,7 @@ namespace audio
       alSourcei(src_id, AL_LOOPING, AL_FALSE); // Adjust as needed
     }
     
-    virtual bool set_buffer_data_8u(unsigned int buf_id, const std::vector<unsigned char>& buffer, int num_channels, int sample_rate)
+    virtual bool set_buffer_data_8u(unsigned int buf_id, const std::vector<unsigned char>& buffer, int num_channels, int sample_rate) override
     {
       ALenum format;
       if (num_channels == 1)
@@ -145,7 +145,7 @@ namespace audio
       return true;
     }
     
-    virtual bool set_buffer_data_16s(unsigned int buf_id, const std::vector<signed short>& buffer, int num_channels, int sample_rate)
+    virtual bool set_buffer_data_16s(unsigned int buf_id, const std::vector<signed short>& buffer, int num_channels, int sample_rate) override
     {
       ALenum format;
       if (num_channels == 1)
@@ -161,7 +161,7 @@ namespace audio
       return true;
     }
     
-    virtual bool set_buffer_data_32f(unsigned int buf_id, const std::vector<float>& buffer, int num_channels, int sample_rate)
+    virtual bool set_buffer_data_32f(unsigned int buf_id, const std::vector<float>& buffer, int num_channels, int sample_rate) override
     {
       // 32-bit float is not part of the original OpenAL 1.1 core spec.
       // It is available through the common AL_EXT_FLOAT32 extension.
