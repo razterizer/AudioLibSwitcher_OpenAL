@@ -16,6 +16,22 @@
   #include <AL/alc.h>
 #endif
 
+// Define FLOAT32 format constants if not provided by the OpenAL headers
+#ifndef AL_FORMAT_MONO_FLOAT32
+    #define AL_FORMAT_MONO_FLOAT32 0x10010
+#endif
+#ifndef AL_FORMAT_STEREO_FLOAT32
+    #define AL_FORMAT_STEREO_FLOAT32 0x10011
+#endif
+
+// You might also want to define the double-precision ones for future use
+#ifndef AL_FORMAT_MONO_DOUBLE_EXT
+    #define AL_FORMAT_MONO_DOUBLE_EXT 0x10012
+#endif
+#ifndef AL_FORMAT_STEREO_DOUBLE_EXT
+    #define AL_FORMAT_STEREO_DOUBLE_EXT 0x10013
+#endif
+
 #include <iostream>
 
 
