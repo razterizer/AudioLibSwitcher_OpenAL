@@ -44,10 +44,10 @@ namespace audio
     ALCcontext* m_context = nullptr;
     
   public:
-    virtual void init() override
+    virtual void init(bool enable_audio = true) override
     {
       // Initialize OpenAL context and device
-      m_device = alcOpenDevice(nullptr);
+      m_device = enable_audio ? alcOpenDevice(nullptr) : alcOpenDevice("null");
       if (m_device == nullptr)
       {
         // Handle error: Unable to open audio device
