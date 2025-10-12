@@ -115,11 +115,6 @@ namespace audio
       alSourcePause(src_id);
     }
     
-    virtual void resume_source(unsigned int src_id) override
-    {
-      alSourcePlay(src_id);
-    }
-    
     virtual void stop_source(unsigned int src_id) override
     {
       alSourceStop(src_id);
