@@ -282,6 +282,7 @@ namespace audio
     virtual bool set_speed_of_sound(unsigned int /*src_id*/, float speed_of_sound) override
     {
       alSpeedOfSound(speed_of_sound);
+      return alGetError() != AL_NO_ERROR;
     }
     
     virtual std::optional<float> get_speed_of_sound(unsigned int /*src_id*/) override
