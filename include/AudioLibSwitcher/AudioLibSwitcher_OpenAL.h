@@ -325,15 +325,17 @@ namespace audio
     
     virtual std::string check_error() override
     {
-      std::string err_str;
-      // Check for errors
       ALenum error = alGetError();
-      if (error != AL_NO_ERROR)
+      switch (error)
       {
-        // Handle error
-        err_str = alGetString(error);
+        case AL_NO_ERROR: return "";
+        case AL_INVALID_NAME: return "AL_INVALID_NAME";
+        case AL_INVALID_ENUM: return "AL_INVALID_ENUM";
+        case AL_INVALID_VALUE: return "AL_INVALID_VALUE";
+        case AL_INVALID_OPERATION: return "AL_INVALID_OPERATION";
+        case AL_OUT_OF_MEMORY: return "AL_OUT_OF_MEMORY";
+        default: return "UNKNOWN_AL_ERROR";
       }
-      return err_str;
     }
   };
 
