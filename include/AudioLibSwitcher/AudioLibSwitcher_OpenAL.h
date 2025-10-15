@@ -38,7 +38,7 @@
 namespace audio
 {
   
-  class AudioLibSwitcher_OpenAL final : IAudioLibSwitcher
+  class AudioLibSwitcher_OpenAL final : public IAudioLibSwitcher
   {
     ALCdevice* m_device = nullptr;
     ALCcontext* m_context = nullptr;
