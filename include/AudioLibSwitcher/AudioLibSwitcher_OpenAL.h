@@ -214,6 +214,111 @@ namespace audio
       alSourcei(src_id, AL_BUFFER, 0);
     }
     
+    virtual void init_3d_scene() override
+    {
+      alDopplerFactor(1.0f); // default
+    }
+
+    virtual void enable_source_3d_audio(unsigned int src_id, bool enable) override
+    {
+      // When AL_SOURCE_RELATIVE is true, positions are relative to listener (no world 3D)
+      alSourcei(src_id, AL_SOURCE_RELATIVE, enable ? AL_FALSE : AL_TRUE);
+    }
+
+    // std::array<float, 9> is a row-major 3x3 matrix.
+    // Only valid value for channel is 1.
+    virtual bool set_source_3d_state_channel(
+        unsigned int src_id, int channel,
+        const std::array<float, 9>& /*rot_mtx*/,
+        const std::array<float, 3>& pos_world, const std::array<float, 3>& vel_world) override
+    {
+      if (channel != 1)
+      {
+        std::cerr << "WARNING in enable_source_3d_audio : 3D state can only be applied to mono sources (channel 1)." << std::endl;
+        return false;
+      }
+      
+      alSource3f(src_id, AL_POSITION, pos_world[0], pos_world[1], pos_world[2]);
+      alSource3f(src_id, AL_VELOCITY, vel_world[0], vel_world[1], vel_world[2]);
+      
+      return true;
+    }
+    
+    // std::array<float, 9> is a row-major 3x3 matrix.
+    // channel = 0 is the only valid value here.
+    virtual bool set_listener_3d_state_channel(
+        int channel,
+        const std::array<float, 9>& rot_mtx,
+        const std::array<float, 3>& pos_world,
+        const std::array<float, 3>& vel_world) override
+    {
+      if (channel != 0) { // OpenAL listener is one entity
+        std::cerr << "Warning: OpenAL supports only one listener." << std::endl;
+        return false;
+      }
+      
+      // Position & velocity
+      alListener3f(AL_POSITION, pos_world[0], pos_world[1], pos_world[2]);
+      alListener3f(AL_VELOCITY, vel_world[0], vel_world[1], vel_world[2]);
+      
+      // Convert rotation matrix to forward & up vectors
+      // Assuming rot_mtx is row-major 3x3
+      // Row 0 = X axis, Row 1 = Y axis, Row 2 = Z axis
+      ALfloat forward[3] = { -rot_mtx[6], -rot_mtx[7], -rot_mtx[8] }; // -Z
+      ALfloat up[3]      = { rot_mtx[3],  rot_mtx[4],  rot_mtx[5] };  // Y
+      
+      ALfloat orientation[6] = {
+        forward[0], forward[1], forward[2],
+        up[0],      up[1],      up[2]
+      };
+      alListenerfv(AL_ORIENTATION, orientation);
+      
+      return true;
+    }
+    
+    virtual bool set_speed_of_sound(unsigned int /*src_id*/, float speed_of_sound) override
+    {
+      alSpeedOfSound(speed_of_sound);
+    }
+    
+    virtual std::optional<float> get_speed_of_sound(unsigned int /*src_id*/) override
+    {
+      return alGetFloat(AL_SPEED_OF_SOUND);
+    }
+    
+    virtual bool set_attenuation_min_distance(unsigned int src_id, float min_dist) override
+    {
+      alSourcef(src_id, AL_REFERENCE_DISTANCE, min_dist);
+      return true;
+    }
+    
+    virtual bool set_attenuation_max_distance(unsigned int src_id, float max_dist) override
+    {
+      alSourcef(src_id, AL_MAX_DISTANCE, max_dist);
+      return true;
+    }
+    
+    virtual bool set_attenuation_constant_falloff(unsigned int src_id, float const_falloff) override
+    {
+      // OpenAL does not support separate constant term directly.
+      // You could adjust the ROLLOFF_FACTOR slightly to simulate.
+      return true;
+    }
+    
+    virtual bool set_attenuation_linear_falloff(unsigned int src_id, float lin_falloff) override
+    {
+      alSourcef(src_id, AL_ROLLOFF_FACTOR, lin_falloff);
+      return true;
+    }
+    
+    virtual bool set_attenuation_quadratic_falloff(unsigned int src_id, float sq_falloff) override
+    {
+      // Standard OpenAL does not have separate quadratic factor.
+      // You could combine with AL_ROLLOFF_FACTOR to approximate more complex curves,
+      // but usually you just choose AL_INVERSE_DISTANCE or AL_INVERSE_DISTANCE_CLAMPED.
+      return true;
+    }
+    
     virtual std::string check_error() override
     {
       std::string err_str;
