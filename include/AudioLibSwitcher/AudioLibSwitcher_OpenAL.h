@@ -287,7 +287,7 @@ namespace audio
     
     virtual std::optional<float> get_speed_of_sound(unsigned int /*src_id*/) override
     {
-      return alGetFloat(AL_SPEED_OF_SOUND);
+      return std::optional<float>(alGetFloat(AL_SPEED_OF_SOUND));
     }
     
     virtual bool set_attenuation_min_distance(unsigned int src_id, float min_dist) override
