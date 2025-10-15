@@ -51,17 +51,20 @@ namespace audio
       if (m_device == nullptr)
       {
         // Handle error: Unable to open audio device
-        std::cerr << "ERROR: Unable to open audio device in AudioSourceHandler().\n";
+        std::cerr << "ERROR: Unable to open audio device.\n";
       }
       
       m_context = alcCreateContext(m_device, nullptr);
       if (m_context == nullptr)
       {
         // Handle error: Unable to create audio context
-        std::cerr << "ERROR: Unable to create audio context in AudioSourceHandler().\n";
+        std::cerr << "ERROR: Unable to create audio context.\n";
       }
       
-      alcMakeContextCurrent(m_context);
+      if (m_context == nullptr || alcMakeContextCurrent(m_context) == ALC_FALSE)
+      {
+        std::cerr << "ERROR: Failed to create or activate OpenAL context .\n";
+      }
     }
     
     virtual void finish() override
