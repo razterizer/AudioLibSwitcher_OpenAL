@@ -33,6 +33,7 @@
 #endif
 
 #include <iostream>
+#include <algorithm>
 
 
 namespace audio
@@ -215,6 +216,26 @@ namespace audio
     virtual void detach_buffer_from_source(unsigned int src_id) override
     {
       alSourcei(src_id, AL_BUFFER, 0);
+    }
+    
+    virtual void set_source_panning(unsigned int src_id, std::optional<float> pan = std::nullopt) override
+    {
+      // #FHXFTW!
+      if (!pan.has_value())
+        return;
+        
+      ALint buffer;
+      alGetSourcei(src_id, AL_BUFFER, &buffer);
+      ALint format;
+      alGetBufferi(buffer, AL_FORMAT, &format);
+      if (format != AL_FORMAT_MONO8 && format != AL_FORMAT_MONO16)
+        return;
+      
+      // Clamp pan [-1, 1]
+      float p = std::max(-1.f, std::min(1.f, pan.value()));
+      
+      // Move the mono source along X-axis for simple left-right pan
+      alSource3f(src_id, AL_POSITION, p, 0.f, 0.f);
     }
     
     virtual void init_3d_scene() override
