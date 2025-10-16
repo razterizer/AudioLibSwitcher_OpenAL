@@ -279,43 +279,43 @@ namespace audio
       return true;
     }
     
-    virtual bool set_speed_of_sound(unsigned int /*src_id*/, float speed_of_sound) override
+    virtual bool set_source_speed_of_sound(unsigned int /*src_id*/, float speed_of_sound) override
     {
       alSpeedOfSound(speed_of_sound);
       return alGetError() != AL_NO_ERROR;
     }
     
-    virtual std::optional<float> get_speed_of_sound(unsigned int /*src_id*/) override
+    virtual std::optional<float> get_source_speed_of_sound(unsigned int /*src_id*/) override
     {
       return std::optional<float>(alGetFloat(AL_SPEED_OF_SOUND));
     }
     
-    virtual bool set_attenuation_min_distance(unsigned int src_id, float min_dist) override
+    virtual bool set_source_attenuation_min_distance(unsigned int src_id, float min_dist) override
     {
       alSourcef(src_id, AL_REFERENCE_DISTANCE, min_dist);
       return true;
     }
     
-    virtual bool set_attenuation_max_distance(unsigned int src_id, float max_dist) override
+    virtual bool set_source_attenuation_max_distance(unsigned int src_id, float max_dist) override
     {
       alSourcef(src_id, AL_MAX_DISTANCE, max_dist);
       return true;
     }
     
-    virtual bool set_attenuation_constant_falloff(unsigned int src_id, float const_falloff) override
+    virtual bool set_source_attenuation_constant_falloff(unsigned int src_id, float const_falloff) override
     {
       // OpenAL does not support separate constant term directly.
       // You could adjust the ROLLOFF_FACTOR slightly to simulate.
       return true;
     }
     
-    virtual bool set_attenuation_linear_falloff(unsigned int src_id, float lin_falloff) override
+    virtual bool set_source_attenuation_linear_falloff(unsigned int src_id, float lin_falloff) override
     {
       alSourcef(src_id, AL_ROLLOFF_FACTOR, lin_falloff);
       return true;
     }
     
-    virtual bool set_attenuation_quadratic_falloff(unsigned int src_id, float sq_falloff) override
+    virtual bool set_source_attenuation_quadratic_falloff(unsigned int src_id, float sq_falloff) override
     {
       // Standard OpenAL does not have separate quadratic factor.
       // You could combine with AL_ROLLOFF_FACTOR to approximate more complex curves,
