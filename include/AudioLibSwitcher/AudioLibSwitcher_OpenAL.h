@@ -224,12 +224,13 @@ namespace audio
       if (!pan.has_value())
         return;
         
-      ALint buffer;
-      alGetSourcei(src_id, AL_BUFFER, &buffer);
-      ALint format;
-      alGetBufferi(buffer, AL_FORMAT, &format);
-      if (format != AL_FORMAT_MONO8 && format != AL_FORMAT_MONO16)
-        return;
+      // error: use of undeclared identifier 'AL_FORMAT'
+      //ALint buffer;
+      //alGetSourcei(src_id, AL_BUFFER, &buffer);
+      //ALint format;
+      //alGetBufferi(buffer, AL_FORMAT, &format);
+      //if (format != AL_FORMAT_MONO8 && format != AL_FORMAT_MONO16)
+      //  return;
       
       // Clamp pan [-1, 1]
       float p = std::max(-1.f, std::min(1.f, pan.value()));
