@@ -44,6 +44,15 @@ namespace audio
     ALCdevice* m_device = nullptr;
     ALCcontext* m_context = nullptr;
     
+    struct SourceDirectivityState
+    {
+      float alpha            = 0.f;  // [0, 1].
+      float sharpness        = 1.f;  // [1, 8].
+      int type               = 0; // [0, 3].
+      float rear_attenuation = 1.f; // [0, 1]
+    };
+    std::unordered_map<unsigned int, SourceDirectivityState> m_source_states;
+    
   public:
     virtual void init(bool enable_audio = true) override
     {
@@ -342,6 +351,80 @@ namespace audio
       // Standard OpenAL does not have separate quadratic factor.
       // You could combine with AL_ROLLOFF_FACTOR to approximate more complex curves,
       // but usually you just choose AL_INVERSE_DISTANCE or AL_INVERSE_DISTANCE_CLAMPED.
+      return true;
+    }
+    
+    // directivity_alpha = 0 : Omni.
+    // directivity_alpha = 1 : Fully Directional.
+    // [0, 1].
+    virtual bool set_source_directivity_alpha(unsigned int src_id, float directivity_alpha) override
+    {
+      directivity_alpha = std::clamp(directivity_alpha, 0.f, 1.f);
+      m_source_states[src_id].alpha = directivity_alpha;
+      
+      // Map to OpenAL cone angles
+      float inner_angle = 360.f - 300.f * directivity_alpha; // 0 = omni (360°), 1 = narrow
+      float outer_angle = 360.f - 150.f * directivity_alpha;
+      alSourcef(src_id, AL_CONE_INNER_ANGLE, inner_angle);
+      alSourcef(src_id, AL_CONE_OUTER_ANGLE, outer_angle);
+      return true;
+    }
+    
+    // [1, 8]. 8 = sharpest.
+    virtual bool set_source_directivity_sharpness(unsigned int src_id, float directivity_sharpness) override
+    {
+      directivity_sharpness = std::clamp(directivity_sharpness, 1.f, 8.f);
+      m_source_states[src_id].sharpness = directivity_sharpness;
+      
+      // Map to outer gain (linear approximation)
+      float outer_gain = std::clamp(1.f - (directivity_sharpness - 1.f) / 7.f, 0.2f, 1.f);
+      alSourcef(src_id, AL_CONE_OUTER_GAIN, outer_gain);
+      return true;
+    }
+    
+    // 0 = Cardioid, 1 = SuperCardioid, 2 = HalfRectifiedDipole, 3 = Dipole.
+    virtual bool set_source_directivity_type(unsigned int src_id, int directivity_type) override
+    {
+      m_source_states[src_id].type = directivity_type;
+      
+      // OpenAL cannot model dipoles/cardioids precisely
+      // Only rough approximation: narrow cone for directional, omni for type-agnostic
+      if (directivity_type == 0 || directivity_type == 1)
+      {
+        alSourcef(src_id, AL_CONE_INNER_ANGLE, 60.f);
+        alSourcef(src_id, AL_CONE_OUTER_ANGLE, 180.f);
+        alSourcef(src_id, AL_CONE_OUTER_GAIN, 0.2f);
+      }
+      else
+      {
+        // Omni or unsupported type → full 360° cone
+        alSourcef(src_id, AL_CONE_INNER_ANGLE, 360.f);
+        alSourcef(src_id, AL_CONE_OUTER_ANGLE, 360.f);
+        alSourcef(src_id, AL_CONE_OUTER_GAIN, 1.f);
+      }
+      
+      return true;
+    }
+    
+    // [0.f, 1.f]. 0 = Silence, 1 = No Attenuation.
+    virtual bool set_source_rear_attenuation(unsigned int src_id, float rear_attenuation) override
+    {
+      rear_attenuation = std::clamp(rear_attenuation, 0.f, 1.f);
+      m_source_states[src_id].rear_attenuation = rear_attenuation;
+      
+      // Map to OpenAL outer gain: 0 = silent behind, 1 = no attenuation
+      float outer_gain = rear_attenuation;
+      alSourcef(src_id, AL_CONE_OUTER_GAIN, outer_gain);
+      
+      return true;
+    }
+    
+    // [0.f, 1.f]. 0 = Silence, 1 = No Attenuation.
+    virtual bool set_listener_rear_attenuation(float rear_attenuation) override
+    {
+      // No native OpenAL support for listener rear attenuation
+      // Store locally; can be applied in post-processing if desired
+      // m_listener_rear_attenuation = std::clamp(rear_attenuation, 0.f, 1.f);
       return true;
     }
     
