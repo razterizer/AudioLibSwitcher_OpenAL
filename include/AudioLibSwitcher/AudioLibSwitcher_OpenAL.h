@@ -116,7 +116,7 @@ namespace audio
       alSourcePlay(src_id);
     }
     
-    virtual bool is_source_playing(unsigned int src_id) override
+    virtual std::optional<bool> is_source_playing(unsigned int src_id) override
     {
       ALint source_state = 0;
       alGetSourcei(src_id, AL_SOURCE_STATE, &source_state);
