@@ -44,14 +44,14 @@ namespace audio
     ALCdevice* m_device = nullptr;
     ALCcontext* m_context = nullptr;
     
-    struct SourceDirectivityState
+    struct SourceState
     {
       float alpha            = 0.f;  // [0, 1].
       float sharpness        = 1.f;  // [1, 8].
       int type               = 0; // [0, 3].
       float rear_attenuation = 1.f; // [0, 1]
     };
-    std::unordered_map<unsigned int, SourceDirectivityState> m_source_states;
+    std::unordered_map<unsigned int, SourceState> m_source_states;
     
   public:
     virtual void init(bool enable_audio = true) override
