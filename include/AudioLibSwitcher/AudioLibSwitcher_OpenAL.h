@@ -53,6 +53,60 @@ namespace audio
     };
     std::unordered_map<unsigned int, SourceState> m_source_states;
     
+    int listener_cs_conv = 0; // default RH_XRight_YUp_ZBackward
+    
+    void apply_coordsys_convention(std::array<float, 9>& rot_mtx, int cs_conv) const
+    {
+      switch (cs_conv)
+      {
+        case 0: // RH_XRight_YUp_ZBackward.
+          // Default convention: No change.
+          break;
+          
+        case 1: // RH_XLeft_YUp_ZForward.
+          // Flip X and Z axes.
+          rot_mtx[0] = -rot_mtx[0];
+          rot_mtx[1] = -rot_mtx[1];
+          rot_mtx[2] = -rot_mtx[2];
+          rot_mtx[6] = -rot_mtx[6];
+          rot_mtx[7] = -rot_mtx[7];
+          rot_mtx[8] = -rot_mtx[8];
+          break;
+          
+        case 2: // RH_XRight_YDown_ZForward.
+          // Flip Y and Z axes.
+          rot_mtx[3] = -rot_mtx[3];
+          rot_mtx[4] = -rot_mtx[4];
+          rot_mtx[5] = -rot_mtx[5];
+          rot_mtx[6] = -rot_mtx[6];
+          rot_mtx[7] = -rot_mtx[7];
+          rot_mtx[8] = -rot_mtx[8];
+          break;
+          
+        case 3: // RH_XLeft_YDown_ZBackward.
+          // Flip X and Y axes.
+          rot_mtx[0] = -rot_mtx[0];
+          rot_mtx[1] = -rot_mtx[1];
+          rot_mtx[2] = -rot_mtx[2];
+          rot_mtx[3] = -rot_mtx[3];
+          rot_mtx[4] = -rot_mtx[4];
+          rot_mtx[5] = -rot_mtx[5];
+          break;
+          
+        case 4: // RH_XRight_YForward_ZUp.
+          // Swap Y and Z axes (Y→Z, Z→Y).
+        {
+          std::array<float, 9> old = rot_mtx;
+          rot_mtx[3] = old[6]; rot_mtx[4] = old[7]; rot_mtx[5] = old[8]; // up = old forward
+          rot_mtx[6] = old[3]; rot_mtx[7] = old[4]; rot_mtx[8] = old[5]; // forward = old up
+          break;
+        }
+          
+        default:
+          std::cerr << "ERROR: Invalid coordinate system convention " << cs_conv << std::endl;
+      }
+    }
+    
   public:
     virtual void init(bool enable_audio = true) override
     {
@@ -445,7 +499,7 @@ namespace audio
     // channel = 0 is the only valid value here.
     virtual bool set_listener_3d_state_channel(
         int channel,
-        const std::array<float, 9>& rot_mtx,
+        const std::array<float, 9>& rot_mtx_in,
         const std::array<float, 3>& pos_world,
         const std::array<float, 3>& vel_world) override
     {
@@ -455,13 +509,17 @@ namespace audio
         return false;
       }
       
-      // Position & velocity
+      // Position & velocity.
       alListener3f(AL_POSITION, pos_world[0], pos_world[1], pos_world[2]);
       alListener3f(AL_VELOCITY, vel_world[0], vel_world[1], vel_world[2]);
       
-      // Convert rotation matrix to forward & up vectors
-      // Assuming rot_mtx is row-major 3x3
-      // Row 0 = X axis, Row 1 = Y axis, Row 2 = Z axis
+      // Copy and adapt rotation.
+      std::array<float, 9> rot_mtx = rot_mtx_in;
+      apply_coordsys_convention(rot_mtx, listener_cs_conv);
+      
+      // Convert rotation matrix to forward & up vectors.
+      // Assuming rot_mtx is row-major 3x3.
+      // Row 0 = X axis, Row 1 = Y axis, Row 2 = Z axis.
       ALfloat forward[3] = { -rot_mtx[6], -rot_mtx[7], -rot_mtx[8] }; // -Z
       ALfloat up[3]      = { rot_mtx[3],  rot_mtx[4],  rot_mtx[5] };  // Y
       
@@ -485,7 +543,7 @@ namespace audio
         return false;
       }
       
-      // Position & velocity
+      // Position & velocity.
       ALfloat x = 0.f, y = 0.f, z = 0.f;
       alGetListener3f(AL_POSITION, &x, &y, &z);
       pos_world[0] = x;
@@ -515,6 +573,9 @@ namespace audio
         up[0],      up[1],      up[2],
         forward[0], forward[1], forward[2]
       };
+      
+      // Undo convention transform to return caller’s space.
+      apply_coordsys_convention(rot_mtx, listener_cs_conv);
       
       return true;
     }
@@ -784,6 +845,32 @@ namespace audio
     virtual std::optional<float> get_listener_rear_attenuation() const override
     {
       return std::nullopt;
+    }
+    
+    // 0 = RH_XRight_YUp_ZBackward, 1 = RH_XLeft_YUp_ZForward, 2 = RH_XRight_YDown_ZForward, 3 = RH_XLeft_YDown_ZBackward, 4 = RH_XRight_YForward_ZUp.
+    virtual bool set_source_coordsys_convention(unsigned int src_id, int cs_conv) override
+    {
+      return false;
+    }
+    
+    // 0 = RH_XRight_YUp_ZBackward, 1 = RH_XLeft_YUp_ZForward, 2 = RH_XRight_YDown_ZForward, 3 = RH_XLeft_YDown_ZBackward, 4 = RH_XRight_YForward_ZUp.
+    virtual std::optional<int> get_source_coordsys_convention(unsigned int src_id) const override
+    {
+      return std::nullopt;
+    }
+    
+    // 0 = RH_XRight_YUp_ZBackward, 1 = RH_XLeft_YUp_ZForward, 2 = RH_XRight_YDown_ZForward, 3 = RH_XLeft_YDown_ZBackward, 4 = RH_XRight_YForward_ZUp.
+    virtual bool set_listener_coordsys_convention(int cs_conv) override
+    {
+      cs_conv = std::clamp(cs_conv, 0, 4);
+      listener_cs_conv = cs_conv;
+      return true;
+    }
+    
+    // 0 = RH_XRight_YUp_ZBackward, 1 = RH_XLeft_YUp_ZForward, 2 = RH_XRight_YDown_ZForward, 3 = RH_XLeft_YDown_ZBackward, 4 = RH_XRight_YForward_ZUp.
+    virtual std::optional<int> get_listener_coordsys_convention() const override
+    {
+      return listener_cs_conv;
     }
     
     virtual std::string check_error() override
