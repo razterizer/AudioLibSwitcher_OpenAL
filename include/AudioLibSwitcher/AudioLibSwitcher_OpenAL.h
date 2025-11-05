@@ -256,7 +256,7 @@ namespace audio
     }
     
     // Perceptually linear mapping: 0 -> -60 dB, 1 -> 0 dB.
-    virtual void set_source_volume_slider(unsigned int src_id, float vol01) override override
+    virtual void set_source_volume_slider(unsigned int src_id, float vol01) override
     {
       float vol_dB = -60.f + 60.f * vol01;
       set_source_volume_dB(src_id, vol_dB);
