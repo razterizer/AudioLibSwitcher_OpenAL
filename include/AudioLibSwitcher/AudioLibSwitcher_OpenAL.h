@@ -219,15 +219,15 @@ namespace audio
       alSourceStop(src_id);
     }
     
-    virtual void set_source_volume(unsigned int src_id, float vol) override
+    virtual void set_source_gain(unsigned int src_id, float gain) override
     {
       if (!alIsSource(src_id))
         return;  // Invalid handle — doesn't exist.
     
-      alSourcef(src_id, AL_GAIN, vol);
+      alSourcef(src_id, AL_GAIN, gain);
     }
     
-    virtual std::optional<float> get_source_volume(unsigned int src_id) const override
+    virtual std::optional<float> get_source_gain(unsigned int src_id) const override
     {
       if (!alIsSource(src_id))
         return std::nullopt;  // Invalid handle — doesn't exist.
