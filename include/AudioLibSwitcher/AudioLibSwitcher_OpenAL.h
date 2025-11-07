@@ -256,19 +256,29 @@ namespace audio
     }
     
     // Perceptually linear mapping: 0 -> -60 dB, 1 -> 0 dB.
-    virtual void set_source_volume_slider(unsigned int src_id, float vol01) override
+    virtual void set_source_volume_slider(unsigned int src_id, float vol01,
+                                          float min_dB = -60.f,
+                                          std::optional<float> nl_taper = std::nullopt) override
     {
-      float vol_dB = -60.f + 60.f * vol01;
+      float t = vol01;
+      if (nl_taper.has_value()) // Non-linear tapering.
+        t = std::pow(vol01, std::clamp(nl_taper.value(), 0.f, 1.f)); // nl_taper < 1 : Brightens mid-range.
+      float vol_dB = min_dB * (1.f - t);
       set_source_volume_dB(src_id, vol_dB);
     }
     
     // Perceptually linear mapping: 0 -> -60 dB, 1 -> 0 dB.
-    virtual std::optional<float> get_source_volume_slider(unsigned int src_id) const override
+    virtual std::optional<float> get_source_volume_slider(unsigned int src_id,
+                                                          float min_dB = -60.f,
+                                                          std::optional<float> nl_taper = std::nullopt) const override
     {
       auto vol_dB = get_source_volume_dB(src_id);
       if (!vol_dB.has_value())
         return std::nullopt;
-      float vol01 = std::clamp(vol_dB.value()/60.f + 1.f, 0.f, 1.f);
+      float t = 1.f - vol_dB.value()/min_dB;
+      float vol01 = t;
+      if (nl_taper.has_value())
+        vol01 = std::pow(t, 1.0f / std::clamp(nl_taper.value(), 0.f, 1.f));
       return vol01;
     }
     
