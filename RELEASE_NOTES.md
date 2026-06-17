@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.0.4
+
+- Pin the Windows release workflow to Forge 0.8.1 while validating the OpenAL
+  dependency release path.
+
 ## 1.0.0.3
 
 - Rebuild the release with Forge 0.8.1, which accepts compatible MSVC runner
