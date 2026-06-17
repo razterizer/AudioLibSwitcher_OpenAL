@@ -1,10 +1,7 @@
 name: release macos
 
 on:
-  push:
-    tags:
-      - "release-*"
-      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write

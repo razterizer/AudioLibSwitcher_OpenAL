@@ -11,7 +11,7 @@ paths = []
 public_headers = ["include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h"]
 
 [build]
-number = 1
+number = 2
 
 [release]
 build_number_format = "dotted"
@@ -22,7 +22,7 @@ AudioLibSwitcher = { path = "AudioLibSwitcher" }
 
 [profile.workflow-release.dependencies]
 AudioLibSwitcher = { github = "razterizer/AudioLibSwitcher", version = "1.0.0+build.1" }
-3rdparty_OpenAL = { github = "razterizer/3rdparty_OpenAL", version = "1.0.0+build.1" }
+3rdparty_OpenAL = { github = "razterizer/3rdparty_OpenAL", version = "1.0.0+build.3" }
 
 [profile.workflow-release.build]
 configuration = "Release"

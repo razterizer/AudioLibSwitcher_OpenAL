@@ -4,10 +4,10 @@ format = 2
 name = "3rdparty_OpenAL"
 github = "razterizer/3rdparty_OpenAL"
 package = "3rdparty_OpenAL"
-version = "1.0.0+build.1"
+version = "1.0.0+build.3"
 target = "windows-x86_64"
-url = "https://github.com/razterizer/3rdparty_OpenAL/releases/download/release-1.0.0.1/3rdparty_OpenAL-1.0.0+build.1-windows-x86_64.cbox"
-sha256 = "1986d6493331be1c97a7ae3ead1c3af75b0962a84f76817330450c8ca23e2640"
+url = "https://github.com/razterizer/3rdparty_OpenAL/releases/download/release-1.0.0.3/3rdparty_OpenAL-1.0.0+build.3-windows-x86_64.cbox"
+sha256 = "560d4bb386a08e801cc6682a8c4cdedd46f3538baa0fd78fa783c2f7337c08d6"
 
 [[dependency]]
 name = "AudioLibSwitcher"
