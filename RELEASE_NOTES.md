@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.0.3
+
+- Rebuild the release with Forge 0.8.1, which accepts compatible MSVC runner
+  compiler-version drift.
+
 ## 1.0.0.2
 
 - Use the corrected `3rdparty_OpenAL` cbox that preserves the
