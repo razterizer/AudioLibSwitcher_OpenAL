@@ -1,0 +1,19 @@
+format = 2
+
+[[dependency]]
+name = "3rdparty_OpenAL"
+github = "razterizer/3rdparty_OpenAL"
+package = "3rdparty_OpenAL"
+version = "1.0.0+build.1"
+target = "windows-x86_64"
+url = "https://github.com/razterizer/3rdparty_OpenAL/releases/download/release-1.0.0.1/3rdparty_OpenAL-1.0.0+build.1-windows-x86_64.cbox"
+sha256 = "1986d6493331be1c97a7ae3ead1c3af75b0962a84f76817330450c8ca23e2640"
+
+[[dependency]]
+name = "AudioLibSwitcher"
+github = "razterizer/AudioLibSwitcher"
+package = "AudioLibSwitcher"
+version = "1.0.0+build.1"
+target = "any"
+url = "https://github.com/razterizer/AudioLibSwitcher/releases/download/release-1.0.0.1/AudioLibSwitcher-1.0.0+build.1-ho.cbox"
+sha256 = "1212374681c81168d3c4aced82a6737b5885cea06710e9abb640e380cccbf3ea"
