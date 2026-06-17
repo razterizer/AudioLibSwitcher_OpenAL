@@ -17,6 +17,13 @@ number = 1
 [release]
 build_number_format = "dotted"
 
+[dependencies]
+3rdparty_OpenAL = { path = "../3rdparty_OpenAL" }
+
+# TODO: Replace local dependencies with reproducible workflow dependencies.
+# [profile.workflow-release.dependencies]
+# 3rdparty_OpenAL = { github = "owner/3rdparty_OpenAL", version = "<published-version>" }
+
 [profile.workflow-release.build]
 configuration = "Release"
 
