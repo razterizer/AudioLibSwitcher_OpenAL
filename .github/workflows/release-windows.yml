@@ -36,9 +36,25 @@ jobs:
           && cmake --build .forge-bootstrap/build
 
       - name: Prepare hosted release assets
+        id: prepare
+        continue-on-error: true
         shell: pwsh
         run: |
-          ./.forge-bootstrap/build/forge.exe workflow prepare-release
+          ./.forge-bootstrap/build/forge.exe workflow prepare-release 2>&1 | Tee-Object -FilePath forge-prepare-release.log
+          exit $LASTEXITCODE
+
+      - name: Upload prepare log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-prepare-release-log
+          path: forge-prepare-release.log
+          retention-days: 1
+
+      - name: Check prepare result
+        if: steps.prepare.outcome != 'success'
+        shell: pwsh
+        run: exit 1
 
       - name: Publish GitHub release
         uses: ncipollo/release-action@v1

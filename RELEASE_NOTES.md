@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.0.5
+
+- Capture hosted release preparation output as a workflow artifact while
+  diagnosing the Windows release path.
+
 ## 1.0.0.4
 
 - Pin the Windows release workflow to Forge 0.8.1 while validating the OpenAL
