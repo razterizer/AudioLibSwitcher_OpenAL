@@ -9,7 +9,6 @@ cpp_std = 20
 [sources]
 paths = []
 public_headers = ["include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h"]
-include_dirs = ["AudioLibSwitcher/include"]
 
 [build]
 number = 1
@@ -18,11 +17,12 @@ number = 1
 build_number_format = "dotted"
 
 [dependencies]
+AudioLibSwitcher = { path = "AudioLibSwitcher" }
 3rdparty_OpenAL = { path = "../3rdparty_OpenAL" }
 
-# TODO: Replace local dependencies with reproducible workflow dependencies.
-# [profile.workflow-release.dependencies]
-# 3rdparty_OpenAL = { github = "owner/3rdparty_OpenAL", version = "<published-version>" }
+[profile.workflow-release.dependencies]
+AudioLibSwitcher = { github = "razterizer/AudioLibSwitcher", version = "1.0.0+build.1" }
+3rdparty_OpenAL = { github = "razterizer/3rdparty_OpenAL", version = "1.0.0+build.1" }
 
 [profile.workflow-release.build]
 configuration = "Release"
