@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.0.10
+
+- Publish Linux Forge release preparation diagnostics as release assets.
+
 ## 1.0.0.9
 
 - Capture Linux Forge release preparation diagnostics as workflow artifacts.

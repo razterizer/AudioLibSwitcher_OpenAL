@@ -42,15 +42,15 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release -DFORGE_BUILD_TESTS=OFF
           && cmake --build .forge-bootstrap/build
       - name: Prepare Forge release boxes
+        id: prepare
         run: |
           set -eux
-          ./.forge-bootstrap/build/forge workflow prepare-release --skip-unsupported > prepare-release.log 2>&1 || {
-            cat prepare-release.log
-            find .forge -maxdepth 4 -type f -print || true
-            find boxes -maxdepth 2 -type f -print || true
-            exit 1
-          }
+          status=0
+          ./.forge-bootstrap/build/forge workflow prepare-release --skip-unsupported > prepare-release.log 2>&1 || status=$?
           cat prepare-release.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          find .forge -maxdepth 4 -type f -print || true
+          find boxes -maxdepth 2 -type f -print || true
       - name: Upload prepare-release diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -62,5 +62,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: boxes/*.cbox,boxes/*.sha256
+          artifactErrorsFailBuild: false
+          artifacts: prepare-release.log,boxes/*.cbox,boxes/*.sha256
           tag: ${{ github.ref_name }}
+      - name: Fail if prepare-release failed
+        if: steps.prepare.outputs.status != '0'
+        run: exit 1
