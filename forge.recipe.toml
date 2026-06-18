@@ -11,7 +11,7 @@ paths = []
 public_headers = ["include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h"]
 
 [build]
-number = 5
+number = 6
 
 [release]
 build_number_format = "dotted"

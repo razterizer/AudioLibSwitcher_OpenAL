@@ -1,5 +1,10 @@
 # Release notes
 
+## 1.0.0.6
+
+- Made `AudioLibSwitcher_OpenAL.h` include the standard-library headers it uses
+  directly.
+
 ## 1.0.0.5
 
 - Capture hosted release preparation output as a workflow artifact while

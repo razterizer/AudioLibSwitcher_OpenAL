@@ -32,8 +32,13 @@
     #define AL_FORMAT_STEREO_DOUBLE_EXT 0x10013
 #endif
 
-#include <iostream>
 #include <algorithm>
+#include <array>
+#include <iostream>
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 
 namespace audio
