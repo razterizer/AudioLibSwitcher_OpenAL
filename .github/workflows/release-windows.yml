@@ -17,11 +17,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Resolve latest Forge release
+        id: forge-release
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: >-
+            return (await github.rest.repos.getLatestRelease({
+            owner: 'razterizer', repo: 'forge' })).data.tag_name
+
       - name: Checkout Forge
         uses: actions/checkout@v4
         with:
           repository: razterizer/forge
-          ref: release-0.8.1
+          ref: ${{ steps.forge-release.outputs.result }}
           path: .forge-bootstrap
 
       - name: Set up MSVC
@@ -36,25 +45,9 @@ jobs:
           && cmake --build .forge-bootstrap/build
 
       - name: Prepare hosted release assets
-        id: prepare
-        continue-on-error: true
         shell: pwsh
         run: |
-          ./.forge-bootstrap/build/forge.exe workflow prepare-release 2>&1 | Tee-Object -FilePath forge-prepare-release.log
-          exit $LASTEXITCODE
-
-      - name: Upload prepare log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: forge-prepare-release-log
-          path: forge-prepare-release.log
-          retention-days: 1
-
-      - name: Check prepare result
-        if: steps.prepare.outcome != 'success'
-        shell: pwsh
-        run: exit 1
+          ./.forge-bootstrap/build/forge.exe workflow prepare-release
 
       - name: Publish GitHub release
         uses: ncipollo/release-action@v1
