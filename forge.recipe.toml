@@ -11,18 +11,22 @@ paths = []
 public_headers = ["include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h"]
 
 [build]
-number = 6
+number = 7
+macos_system_include_dirs = ["/opt/homebrew/opt/openal-soft/include", "/usr/local/opt/openal-soft/include"]
+macos_system_library_dirs = ["/opt/homebrew/opt/openal-soft/lib", "/usr/local/opt/openal-soft/lib"]
+macos_libraries = ["openal"]
+linux_libraries = ["openal"]
 
 [release]
 build_number_format = "dotted"
 
 [dependencies]
 AudioLibSwitcher = { path = "AudioLibSwitcher" }
-3rdparty_OpenAL = { path = "../3rdparty_OpenAL" }
+3rdparty_OpenAL = { path = "../3rdparty_OpenAL", targets = ["windows-x86_64"] }
 
 [profile.workflow-release.dependencies]
 AudioLibSwitcher = { github = "razterizer/AudioLibSwitcher", version = "1.0.0+build.1" }
-3rdparty_OpenAL = { github = "razterizer/3rdparty_OpenAL", version = "1.0.0+build.3" }
+3rdparty_OpenAL = { github = "razterizer/3rdparty_OpenAL", version = "1.0.0+build.3", targets = ["windows-x86_64"] }
 
 [profile.workflow-release.build]
 configuration = "Release"

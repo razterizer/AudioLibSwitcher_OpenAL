@@ -1,7 +1,10 @@
 name: release linux
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - "release-*"
+      - "v*"
 
 permissions:
   contents: write
@@ -29,6 +32,9 @@ jobs:
           repository: razterizer/forge
           ref: ${{ steps.forge-release.outputs.result }}
           path: .forge-bootstrap
+
+      - name: Install OpenAL Soft
+        run: sudo apt-get update && sudo apt-get install -y libopenal-dev
 
       - name: Build Forge
         run: >-
@@ -89,6 +95,9 @@ jobs:
           repository: razterizer/forge
           ref: ${{ steps.forge-release.outputs.result }}
           path: .forge-bootstrap
+
+      - name: Install OpenAL Soft
+        run: sudo apt-get update && sudo apt-get install -y libopenal-dev
 
       - name: Build Forge
         run: >-
@@ -176,6 +185,8 @@ jobs:
           repository: razterizer/forge
           ref: ${{ steps.forge-release.outputs.result }}
           path: .forge-bootstrap
+      - name: Install OpenAL Soft
+        run: sudo apt-get update && sudo apt-get install -y libopenal-dev
       - name: Build Forge
         run: >-
           cmake -S .forge-bootstrap -B .forge-bootstrap/build -G Ninja

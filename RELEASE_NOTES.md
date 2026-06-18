@@ -1,5 +1,11 @@
 # Release notes
 
+## 1.0.0.7
+
+- Publish target-specific Forge packages for OpenAL system requirements.
+- Use system OpenAL Soft on Linux and macOS while keeping `3rdparty_OpenAL` as
+  the Windows dependency.
+
 ## 1.0.0.6
 
 - Made `AudioLibSwitcher_OpenAL.h` include the standard-library headers it uses

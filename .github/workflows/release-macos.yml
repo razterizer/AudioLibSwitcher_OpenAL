@@ -1,7 +1,10 @@
 name: release macos
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - "release-*"
+      - "v*"
 
 permissions:
   contents: write
@@ -29,6 +32,9 @@ jobs:
           repository: razterizer/forge
           ref: ${{ steps.forge-release.outputs.result }}
           path: .forge-bootstrap
+
+      - name: Install OpenAL Soft
+        run: brew install openal-soft
 
       - name: Build Forge
         run: >-
