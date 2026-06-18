@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.0.8
+
+- Simplify Linux Forge release publishing to the cbox workflow path.
+
 ## 1.0.0.7
 
 - Publish target-specific Forge packages for OpenAL system requirements.
