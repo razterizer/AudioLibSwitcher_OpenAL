@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.0.11
+
+- Include `<cmath>` directly for volume conversion helpers on GCC/Linux.
+
 ## 1.0.0.10
 
 - Publish Linux Forge release preparation diagnostics as release assets.
