@@ -44,11 +44,20 @@ jobs:
       - name: Prepare Forge release boxes
         run: |
           set -eux
-          ./.forge-bootstrap/build/forge workflow prepare-release --skip-unsupported || {
+          ./.forge-bootstrap/build/forge workflow prepare-release --skip-unsupported > prepare-release.log 2>&1 || {
+            cat prepare-release.log
             find .forge -maxdepth 4 -type f -print || true
             find boxes -maxdepth 2 -type f -print || true
             exit 1
           }
+          cat prepare-release.log
+      - name: Upload prepare-release diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-prepare-release-log
+          path: prepare-release.log
+          retention-days: 1
       - name: Publish Forge release boxes
         uses: ncipollo/release-action@v1
         with:

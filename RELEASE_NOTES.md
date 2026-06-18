@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.0.9
+
+- Capture Linux Forge release preparation diagnostics as workflow artifacts.
+
 ## 1.0.0.8
 
 - Simplify Linux Forge release publishing to the cbox workflow path.
