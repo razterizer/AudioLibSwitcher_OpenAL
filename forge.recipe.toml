@@ -11,11 +11,13 @@ paths = []
 public_headers = ["include/AudioLibSwitcher/AudioLibSwitcher_OpenAL.h"]
 
 [build]
-number = 11
+number = 12
 macos_system_include_dirs = ["/opt/homebrew/opt/openal-soft/include", "/usr/local/opt/openal-soft/include"]
 macos_system_library_dirs = ["/opt/homebrew/opt/openal-soft/lib", "/usr/local/opt/openal-soft/lib"]
 macos_libraries = ["openal"]
+macos_brew_packages = ["openal-soft"]
 linux_libraries = ["openal"]
+linux_apt_packages = ["libopenal-dev"]
 
 [release]
 build_number_format = "dotted"

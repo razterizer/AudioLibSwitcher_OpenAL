@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.0.12
+
+- Add Forge provider hints for installing OpenAL Soft on macOS and Linux.
+
 ## 1.0.0.11
 
 - Include `<cmath>` directly for volume conversion helpers on GCC/Linux.
